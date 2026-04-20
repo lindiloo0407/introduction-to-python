@@ -27,6 +27,19 @@ Color codes:
 """
 
 import re
+from enum import Enum
+
+class Stats(Enum):
+  STRENGTH = 0
+  DEXTERITY = 1
+  CONSTITUTION = 2
+  INTELLIGENCE = 3
+  WISDOM = 4
+  CHARISMA = 5
+
+  @property
+  def abv(self):
+    return self.name.lower()[:3]
 
 # ── ANSI escape helpers ───────────────────────────────────────────────────────
 
@@ -245,80 +258,9 @@ def cstrip(text: str) -> str:
                   lambda m: "&" if m.group() == "&&" else "",
                   text)
 
+
 def color(text: str) -> str:
   return diku_to_ansi(text) + RESET
-
-class ColorString(str):
-    """
-    A str subclass returned by color(..., "html").
-
-    Behaves exactly like a regular string in every context — concatenation,
-    slicing, len(), storing in a variable — but adds two extras:
-
-      _repr_html_()   Colab/Jupyter calls this automatically when the object
-                      is the last expression in a cell, so it renders as
-                      colored HTML without you doing anything special.
-
-      .display()      Explicitly push the HTML to the Colab output cell.
-                      Use this when the color() call is NOT the last
-                      expression, e.g. inside a loop or function.
-
-    Never pass to print() — print() always writes the raw string, bypassing
-    the HTML renderer.  Use cprint() or .display() instead.
-    """
-    def _repr_html_(self):
-        return str(self)
-
-    def display(self):
-        """Render this HTML string in the current Colab / Jupyter output cell."""
-        from IPython.display import display as _display, HTML
-        _display(HTML(str(self)))
-
-
-def color(text: str, mode: str = "ansi") -> str:
-    """
-    Convert a Diku-colored string and return the result.
-
-    Parameters
-    ----------
-    text : str
-        String containing Diku color codes (&+c, &R, &N, etc.)
-    mode : str
-        "ansi"  (default)
-            Returns a plain str with ANSI escape sequences.
-            Correct output when passed to print() in a real terminal.
-
-        "html"
-            Returns a ColorString (str subclass) containing an HTML
-            snippet with inline CSS colors on a dark background.
-
-            DO NOT pass to print() — print() always writes raw text.
-            Instead use one of:
-              color(s, "html").display()        explicit render
-              cprint(s)                         auto-detects env, always right
-            Or let it be the last expression in a Colab cell and Colab
-            renders it automatically via _repr_html_().
-
-    Returns
-    -------
-    str or ColorString
-        "ansi" mode  ->  plain str  (ANSI escapes inside)
-        "html" mode  ->  ColorString  (HTML that auto-renders in Colab)
-
-    Examples
-    --------
-        # terminal
-        print(color("&+cHello&N world"))
-
-        # Colab — three equivalent ways
-        cprint("&+cHello&N world")                    # easiest, always correct
-        color("&+cHello&N world", "html").display()   # explicit render
-        color("&+cHello&N world", "html")             # last expression in cell
-    """
-    if mode == "html":
-        return ColorString(diku_to_html(text))
-    return diku_to_ansi(text) + RESET
-
 
 def cinput(prompt: str = "") -> str:
     """
@@ -353,7 +295,7 @@ def crepl(
     if banner:
         cprint(banner)
     
-    cprint(rooms[locations['Moted']])
+    #cprint(rooms[locations['Moted']])
     while True:
         try:
             raw = cinput(prompt)
