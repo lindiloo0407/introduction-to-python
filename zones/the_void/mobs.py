@@ -30,7 +30,7 @@ TEMPLATES: dict[str, dict] = {
     "void_dragon": {
         "name": "Inanis the Void Dragon",
         "key_words": ("inanis"),
-        "room_description": "&MA large dragon stands here looking around agitated.&N",
+        "room_description": "A large &Mdragon&N stands here looking around &Ragitated&N.",
         "description": (
             "This large purple and black dragon seems to have a shroud of darkness around it. Its eyes appear to be pits of blackness"
         ),
