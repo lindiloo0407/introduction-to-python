@@ -29,7 +29,7 @@ TEMPLATES: dict[str, dict] = {
         "wander":   True,
     },
 
-    TEMPLATES: dict[str, dict] = {
+
 
     "Red kobold": {
         "name":             "Jremblen",
